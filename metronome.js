@@ -135,13 +135,7 @@ function handleRandomMuting() {
 
 // Update UI
 function updateUI() {
-  console.log('updateUI called, bpm:', state.bpm);
-  if (bpmEl) {
-    bpmEl.textContent = `BPM: ${Math.round(state.bpm)}`;
-    console.log('Updated bpmEl to:', bpmEl.textContent);
-  } else {
-    console.log('bpmEl not found');
-  }
+  if (bpmEl) bpmEl.textContent = `BPM: ${Math.round(state.bpm)}`;
   if (statusEl) statusEl.textContent = state.isRunning ? "RUNNING" : "STOPPED";
   if (muteEl) muteEl.textContent = `Random mute: ${Math.round(state.randomMuteProbability * 100)}%`;
 
@@ -179,7 +173,6 @@ document.addEventListener("keydown", (e) => {
 
     case 'KeyH':
       if (state.isRunning) {
-        const oldBpm = state.bpm;
         state.bpm = Math.max(1, Math.round(state.bpm / 2));
         // Recalculate next beat timing based on new BPM
         if (audioContext) {
@@ -188,13 +181,11 @@ document.addEventListener("keydown", (e) => {
           scheduler(); // Force scheduler to run with new timing
         }
         updateUI();
-        console.log(`H key: BPM ${oldBpm} -> ${state.bpm}`);
       }
       break;
 
     case 'KeyD':
       if (state.isRunning) {
-        const oldBpm = state.bpm;
         state.bpm = Math.min(300, Math.round(state.bpm * 2));
         // Recalculate next beat timing based on new BPM
         if (audioContext) {
@@ -203,7 +194,6 @@ document.addEventListener("keydown", (e) => {
           scheduler(); // Force scheduler to run with new timing
         }
         updateUI();
-        console.log(`D key: BPM ${oldBpm} -> ${state.bpm}`);
       }
       break;
 
