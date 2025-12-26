@@ -44,6 +44,33 @@ body {
     font-weight: 500;
 }
 
+.mute-display {
+    font-size: 0.9rem;
+    color: #999999;
+    margin-top: 0.5rem;
+}
+
+.random-input {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2a2a2a;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    width: 100px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+}
+
+.random-input:focus {
+    outline: none;
+    border-color: #00aaff;
+}
+
 .metronome__controls {
     border-top: 1px solid #333333;
     padding-top: 1.5rem;

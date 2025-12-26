@@ -9,19 +9,19 @@
 <body>
     <div class="metronome">
         <div class="metronome__display">
-            <div class="tempo-display" id="tempo-display">40 BPM</div>
-            <div class="status-display" id="status-display">Stopped</div>
+            <div class="tempo-display" id="tempo-display">BPM: 40</div>
+            <div class="status-display" id="status-display">STOPPED</div>
+            <div class="mute-display" id="mute">Random mute: 0%</div>
         </div>
 
         <div class="metronome__controls">
             <div class="control-hints">
-                <div class="hint">Space: Start/Stop</div>
-                <div class="hint">T (x2): Tap Tempo</div>
-                <div class="hint">R + #: Random Mute %</div>
-                <div class="hint">H: Half Tempo</div>
-                <div class="hint">D: Double Tempo</div>
+                <div class="hint" id="hint">SPACE = start</div>
             </div>
         </div>
+
+        <!-- Hidden input for random muting -->
+        <input type="number" id="random-input" class="random-input" placeholder="%" style="display: none;">
     </div>
 
     <script src="metronome.js"></script>

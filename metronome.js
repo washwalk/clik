@@ -15,10 +15,11 @@ const state = {
 let audioContext = null;
 
 // DOM Elements
-const bpmEl = document.getElementById("bpm");
-const statusEl = document.getElementById("status");
+const bpmEl = document.getElementById("tempo-display");
+const statusEl = document.getElementById("status-display");
 const muteEl = document.getElementById("mute");
 const hintEl = document.getElementById("hint");
+const randomInput = document.getElementById("random-input");
 
 // Initialize Audio Context
 function initAudio() {
@@ -122,15 +123,21 @@ function handleTapTempo() {
 
 // Handle random muting input
 function handleRandomMuting() {
-  const input = prompt('Enter random muting percentage (0-100):', Math.round(state.randomMuteProbability * 100));
+  // Show input field
+  randomInput.style.display = 'block';
+  randomInput.value = Math.round(state.randomMuteProbability * 100);
+  randomInput.focus();
+  randomInput.select();
+}
 
-  if (input !== null) {
-    const percent = parseInt(input, 10);
-    if (!isNaN(percent) && percent >= 0 && percent <= 100) {
-      state.randomMuteProbability = percent / 100;
-      updateUI();
-    }
+// Apply random muting when input is confirmed
+function applyRandomMuting() {
+  const percent = parseInt(randomInput.value, 10);
+  if (!isNaN(percent) && percent >= 0 && percent <= 100) {
+    state.randomMuteProbability = percent / 100;
   }
+  randomInput.style.display = 'none';
+  updateUI();
 }
 
 // Update UI
@@ -151,6 +158,22 @@ function updateUI() {
 
 // Keyboard event handler
 document.addEventListener("keydown", (e) => {
+  // Handle random input field first
+  if (randomInput.style.display !== 'none') {
+    if (e.code === 'Enter') {
+      applyRandomMuting();
+      e.preventDefault();
+      return;
+    }
+    if (e.code === 'Escape') {
+      randomInput.style.display = 'none';
+      e.preventDefault();
+      return;
+    }
+    // Allow normal input handling for the input field
+    return;
+  }
+
   // Prevent default for our keys
   if (['Space', 'KeyT', 'KeyH', 'KeyD'].includes(e.code) || e.code.startsWith('KeyR')) {
     e.preventDefault();
@@ -191,6 +214,11 @@ document.addEventListener("keydown", (e) => {
       }
       break;
   }
+});
+
+// Handle input field blur (clicking outside)
+randomInput.addEventListener('blur', () => {
+  applyRandomMuting();
 });
 
 // Utility functions for testing
