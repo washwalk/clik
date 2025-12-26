@@ -8,7 +8,7 @@ const state = {
   intervalId: null,
   nextNoteTime: 0,
   scheduleAheadTime: 0.1, // Schedule 100ms ahead
-  lookahead: 25, // Check every 25ms
+  lookahead: 10, // Check every 10ms for more responsive timing
 };
 
 // Audio Context
@@ -135,7 +135,13 @@ function handleRandomMuting() {
 
 // Update UI
 function updateUI() {
-  if (bpmEl) bpmEl.textContent = `BPM: ${Math.round(state.bpm)}`;
+  console.log('updateUI called, bpm:', state.bpm);
+  if (bpmEl) {
+    bpmEl.textContent = `BPM: ${Math.round(state.bpm)}`;
+    console.log('Updated bpmEl to:', bpmEl.textContent);
+  } else {
+    console.log('bpmEl not found');
+  }
   if (statusEl) statusEl.textContent = state.isRunning ? "RUNNING" : "STOPPED";
   if (muteEl) muteEl.textContent = `Random mute: ${Math.round(state.randomMuteProbability * 100)}%`;
 
@@ -173,15 +179,31 @@ document.addEventListener("keydown", (e) => {
 
     case 'KeyH':
       if (state.isRunning) {
+        const oldBpm = state.bpm;
         state.bpm = Math.max(1, Math.round(state.bpm / 2));
+        // Recalculate next beat timing based on new BPM
+        if (audioContext) {
+          const timeToNextBeat = (60.0 / state.bpm) * 0.5; // Half interval for immediate effect
+          state.nextNoteTime = audioContext.currentTime + Math.min(timeToNextBeat, 0.1);
+          scheduler(); // Force scheduler to run with new timing
+        }
         updateUI();
+        console.log(`H key: BPM ${oldBpm} -> ${state.bpm}`);
       }
       break;
 
     case 'KeyD':
       if (state.isRunning) {
+        const oldBpm = state.bpm;
         state.bpm = Math.min(300, Math.round(state.bpm * 2));
+        // Recalculate next beat timing based on new BPM
+        if (audioContext) {
+          const timeToNextBeat = (60.0 / state.bpm) * 0.5; // Half interval for immediate effect
+          state.nextNoteTime = audioContext.currentTime + Math.min(timeToNextBeat, 0.1);
+          scheduler(); // Force scheduler to run with new timing
+        }
         updateUI();
+        console.log(`D key: BPM ${oldBpm} -> ${state.bpm}`);
       }
       break;
 
