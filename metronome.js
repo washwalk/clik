@@ -217,9 +217,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 // Handle input field blur (clicking outside)
-randomInput.addEventListener('blur', () => {
-  applyRandomMuting();
-});
+if (randomInput) {
+  randomInput.addEventListener('blur', () => {
+    applyRandomMuting();
+  });
+}
 
 // Utility functions for testing
 function calculateBpmFromInterval(intervalMs) {
